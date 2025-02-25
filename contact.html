@@ -17,6 +17,80 @@
         }
     }
     customElements.define('hello-world', HelloWorld);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.querySelector('form');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const commentsInput = document.getElementById('comments');
+        const formErrors = [];
+
+        // Function to update character countdown
+        const updateCharacterCountdown = () => {
+            const remaining = 500 - commentsInput.value.length;
+            const countdown = document.getElementById('comments-countdown');
+            countdown.textContent = `${remaining} characters remaining`;
+            if (remaining < 50) {
+                countdown.style.color = remaining < 20 ? 'red' : 'orange';
+            } else {
+                countdown.style.color = 'inherit';
+            }
+        };
+
+        // Function to handle input validation
+        const handleValidation = (input, pattern, errorMessage) => {
+            input.addEventListener('input', () => {
+                const regex = new RegExp(pattern);
+                if (!regex.test(input.value)) {
+                    input.setCustomValidity(errorMessage);
+                    input.reportValidity();
+                    formErrors.push({ field: input.name, error: errorMessage });
+                    input.classList.add('flash-error');
+                    setTimeout(() => input.classList.remove('flash-error'), 500);
+                } else {
+                    input.setCustomValidity('');
+                }
+            });
+        };
+
+        // Function to enforce pattern and remove invalid characters
+        const enforcePattern = (input, pattern) => {
+            input.addEventListener('input', () => {
+                const regex = new RegExp(pattern);
+                if (!regex.test(input.value)) {
+                    input.value = input.value.replace(/[^A-Za-z\s]/g, ''); // Adjust regex as needed
+                    input.classList.add('flash-error');
+                    setTimeout(() => input.classList.remove('flash-error'), 500);
+                }
+            });
+        };
+
+        // Apply validation and masking
+        handleValidation(nameInput, '^[A-Za-z\\s]+$', 'Please enter a valid name (only letters and spaces).');
+        handleValidation(commentsInput, '^[A-Za-z0-9 .,!?()&@#$%^*+=\\-_/]+$', 'Invalid character entered.');
+        enforcePattern(nameInput, '^[A-Za-z\\s]+$');
+        enforcePattern(commentsInput, '^[A-Za-z0-9 .,!?()&@#$%^*+=\\-_/]+$');
+
+        // Update character countdown on input
+        commentsInput.addEventListener('input', updateCharacterCountdown);
+
+        // Submit form with errors
+        form.addEventListener('submit', (event) => {
+            if (!form.checkValidity()) {
+                //event.preventDefault(); // Prevents form submission
+                alert('Please correct the errors in the form.');
+            } else {
+                const errorsField = document.createElement('input');
+                errorsField.type = 'hidden';
+                errorsField.name = 'form-errors';
+                errorsField.value = JSON.stringify(formErrors);
+                form.appendChild(errorsField);
+            }
+        });
+
+        // Initialize character countdown
+        updateCharacterCountdown();
+    });
 </script>
 <body>
     <header class="site-header">
@@ -54,9 +128,10 @@
                 
                         <label for="comments">Comments:<span class="required">*</span></label>
                         <textarea id="comments" name="comments" required minlength="10" maxlength="500" 
-                                  pattern="^[A-Za-z0-9 .,!?()&@#$%^*+=\-_/]+$" 
+                                  pattern="^[A-Za-z0-9 .,!?()&@#$%^*+=\\-_/]+$" 
                                   placeholder="Enter your message"></textarea>
                         <output class="error-message">Please enter a valid comment (10-500 characters).</output>
+                        <div id="comments-countdown"></div>
                 
                         <input type="hidden" name="possible_bot" value="true">
                         

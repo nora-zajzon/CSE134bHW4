@@ -1072,3 +1072,20 @@ button {
 button:hover {
     background-color: var(--secondary-color);
 }
+
+/* Flash error animation */
+.flash-error {
+    animation: flash 0.5s;
+}
+
+@keyframes flash {
+    0% { background-color: #f44336; }
+    100% { background-color: transparent; }
+}
+
+/* Countdown styling */
+#comments-countdown {
+    font-size: 0.9em;
+    margin-top: 5px;
+    color: inherit;
+}
