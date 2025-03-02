@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Lexend+Exa:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Lexend+Exa:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
   --primary-color: #355166;
@@ -27,6 +28,20 @@
   --container-background: #2d2d2d;
   --article-background: #333333;
   --details-background: #2a2a2a;
+}
+
+[data-theme="forest"] {
+  --primary-color: #3a5a40;
+  --secondary-color: #588157;
+  --text-color: #344e41;
+  --background-color: #dad7cd;
+  --nav-hover-color: rgba(190, 190, 190, 0.716);
+  --header-height: 60px;
+  --font-primary: "Montserrat", system-ui, -apple-system, sans-serif;
+  --box-shadow: 0 2px 5px rgba(0, 50, 9, 0.1);
+  --transition-speed: 0.3s;
+  --form-background: #f8f8f8;
+  --border-color: #ddd;
 }
 
 h1:not(.site-title), h2, h3, h4, h5, h6 {
